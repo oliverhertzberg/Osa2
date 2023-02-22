@@ -1,3 +1,4 @@
+import DOMPurify from "dompurify";
 
 
 const Course = (props) => {
@@ -8,11 +9,13 @@ const Course = (props) => {
 
     return(
       <div>
-        <h1>{props.course}</h1>
-        <p dangerouslySetInnerHTML={{__html: partsNameExe.join('')}}></p>
+        <h2>{props.course}</h2>  
+        {/* Löysin dompurifyn youtuupista :D, toivottavasti toi on vähemmän vaarallinen */}  
+        <p dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(partsNameExe.join(''))}}></p>
         <p className="total">Total number of exercises: {exerciseTotal}</p>
       </div>
     )
   }
+
 
   export default Course

@@ -1,9 +1,11 @@
 import Course from "./components/Course"
 import './index.css';
+import DOMpurify from 'dompurify';
 
 
 const App = () => {
-  const course = {
+  const courses = [
+  {
     id: 1,
     name: 'Half Stack application development',
     parts: [
@@ -28,10 +30,32 @@ const App = () => {
       id: 4
     }
   ]
+}, 
+{
+  name: 'Node.js',
+  id: 2,
+  parts: [
+    {
+      name: 'routing',
+      exercises: 3,
+      id: 1
+    },
+    {
+      name: 'Middlewares',
+      exercises: 7,
+      id: 2
+    }
+  ]
 }
-
-  return <Course course={course.name} partsNameExe={course.parts}
-  exerciseTotal={course.parts}/>
+  ]
+  console.log("courses:", courses[0].name)
+  return (
+   <div>
+    <h1>Web development curriculum</h1>
+    <Course course={courses[0].name} partsNameExe={courses[0].parts}/>
+    <Course course={courses[1].name} partsNameExe={courses[1].parts}/>
+  </div>
+  )
     
   
 }
