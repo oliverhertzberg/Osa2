@@ -1,4 +1,6 @@
 import Course from "./components/Course"
+import './index.css';
+
 
 const App = () => {
   const course = {
@@ -27,9 +29,9 @@ const App = () => {
     }
   ]
 }
-  console.log(course.parts[2])
 
-  return <Course course={course.name} partsNameExe={course.parts}/>
+  return <Course course={course.name} partsNameExe={course.parts}
+  exerciseTotal={course.parts}/>
     
   
 }
