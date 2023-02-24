@@ -14,12 +14,17 @@ const App = () => {
   const addName = (e) => {
     console.log('button clicked')
     e.preventDefault()
-    const nameObject = {
-      name: newName,
-    }
-    setPersons(persons.concat(nameObject))
-    setNewName('')
+    const nameCheck = persons.map(person => person.name);
+      return nameCheck.includes(newName)
+        ? alert(`The name "${newName}" is already in use, please type in another name.`)
+        : (
+          setPersons(persons.concat({
+            name: newName,
+          })),
+          setNewName('')
+        )
   }
+  
 
   return (
     <div>
