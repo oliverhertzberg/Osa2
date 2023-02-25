@@ -1,12 +1,16 @@
 import {useState} from 'react'
+import './index.css'
 
 const App = () => {
-  const [persons, setPersons] = useState([{
-    name: 'Arto Hellas',
-    number: '040-1231244'
-  }])
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', number: '040-1231244' },
+    { name: 'Json Derulo', number: '02002119991'},
+    { name: 'Sneaky Snake', number: '99291919919'},
+    { name: 'Jesus Christ', number: '121212333333'}
+  ])
   const [newName, setNewName] = useState('')
   const [newNum, setNewNum] = useState('')
+  const [query, setQuery] = useState('')
 
   const handleNameChange = (e) => {
     console.log(e.target.value)
@@ -16,7 +20,7 @@ const App = () => {
     console.log(e.target.value)
     setNewNum(e.target.value)
   }
-
+  
   const addPerson = (e) => {
     e.preventDefault()
     const nameCheck = persons.map(person => person.name);
@@ -34,13 +38,20 @@ const App = () => {
       setNewName('')
       setNewNum('')
     }
-
   }
-  
 
+  const filteredPersons = persons.filter(person => {
+    return person.name.toLowerCase().includes(query.toLowerCase())
+  })
+
+  
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+        filter shown with <input type="search" value={query}  onChange={e => setQuery(e.target.value)} />
+      </div>
+      <h2>add a new</h2>
       <form onSubmit={addPerson}>
         <div>
           name: <input value={newName} onChange={handleNameChange} />
@@ -49,16 +60,16 @@ const App = () => {
           number: <input value={newNum} onChange={handleNumChange} />
         </div>
         <div>
-          <button type='submit' onClick={addPerson}>Add</button>
+          <button className='nappi' type='submit'>Add</button>
         </div>
       </form>
       <h2>Numbers</h2>
-      <ul>
-        {persons.map(person => <li key={person.name}>{person.name} {person.number}</li>)}
-      </ul>
+      {filteredPersons.map(person => 
+        ( <div key={person.name}>{person.name} {person.number}</div>))}
     </div>
   )
 }
+
 
 
 export default App
