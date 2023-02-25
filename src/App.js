@@ -48,28 +48,47 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with <input type="search" value={query}  onChange={e => setQuery(e.target.value)} />
-      </div>
+      <Filter query={query} setQuery={setQuery}/>
+
       <h2>add a new</h2>
-      <form onSubmit={addPerson}>
+      <Form addPerson={addPerson} handleNameChange={handleNameChange} 
+      handleNumChange={handleNumChange} newName={newName} newNum={newNum} />
+
+      <h2>Numbers</h2>
+      <Persons filteredPersons={filteredPersons} />
+    </div>
+  )
+}
+
+const Filter = (props) => {
+    return(<div>
+      filter shown with <input type="search" value={props.query}  onChange={e => props.setQuery(e.target.value)} />
+    </div>)
+}
+
+const Form = (props) => {
+  return (
+    <form onSubmit={props.addPerson}>
         <div>
-          name: <input value={newName} onChange={handleNameChange} />
+          name: <input value={props.newName} onChange={props.handleNameChange} />
         </div>
         <div>
-          number: <input value={newNum} onChange={handleNumChange} />
+          number: <input value={props.newNum} onChange={props.handleNumChange} />
         </div>
         <div>
           <button className='nappi' type='submit'>Add</button>
         </div>
       </form>
-      <h2>Numbers</h2>
-      {filteredPersons.map(person => 
+  )
+}
+
+const Persons = (props) => {
+  return (
+    <div>
+      {props.filteredPersons.map(person => 
         ( <div key={person.name}>{person.name} {person.number}</div>))}
     </div>
   )
 }
-
-
 
 export default App
