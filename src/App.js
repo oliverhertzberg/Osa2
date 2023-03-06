@@ -1,16 +1,24 @@
-import {useState} from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import './index.css'
+import Personslist from './components/Persons'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-1231244' },
-    { name: 'Json Derulo', number: '02002119991'},
-    { name: 'Sneaky Snake', number: '99291919919'},
-    { name: 'Jesus Christ', number: '121212333333'}
-  ])
+  const [persons, setPersons] = useState(Personslist)
   const [newName, setNewName] = useState('')
   const [newNum, setNewNum] = useState('')
   const [query, setQuery] = useState('')
+
+  
+useEffect(() => {
+  console.log('effect')
+  axios
+    .get('http://localhost:3001/persons')
+    .then(response =>{
+      console.log('promise fulfilled')
+      setPersons(response.data)
+    })
+}, [])
 
   const handleNameChange = (e) => {
     console.log(e.target.value)
@@ -92,3 +100,29 @@ const Persons = (props) => {
 }
 
 export default App
+
+/* effektifunktio esimerkki:
+  useEffect(() => {
+  console.log('effect')
+
+  const eventHandler = response => {
+    console.log('promise fulfilled')
+    setNotes(response.data)
+  }
+
+  const promise = axios.get('http://localhost:3001/notes')
+  promise.then(eventHandler)
+}, []) 
+
+const hook = () => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('promise fulfilled')
+        setPersons(response.data)
+      })
+  }
+  useEffect(hook, [])
+  console.log('render', persons.length, 'persons')
+  */
