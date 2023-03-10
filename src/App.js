@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './index.css';
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -10,12 +11,10 @@ const App = () => {
 
   
 useEffect(() => {
-  console.log('effect')
-  axios
-    .get('http://localhost:3001/persons')
-    .then(response =>{
-      console.log('promise fulfilled')
-      setPersons(response.data)
+  personService
+    .getAll()
+    .then(initialPersons => {
+      setPersons(initialPersons)
     })
 }, [])
 
@@ -27,7 +26,9 @@ useEffect(() => {
     console.log(e.target.value)
     setNewNum(e.target.value)
   }
+
   console.log("persons length:", persons.length)
+
   const addPerson = (e) => {
     e.preventDefault()
     const nameCheck = persons.map(person => person.name);
@@ -38,15 +39,14 @@ useEffect(() => {
     } else if (numCheck.includes(newNum)) {
       alert(`The number "${newNum}" is already in use, please type in another one.`)
     } else {
-        axios
-          .post('http://localhost:3001/persons', {
+        personService
+          .create({
             name: newName,
             number: newNum,
             id: persons.length + 1
           })
-          .then(response => {
-            console.log(response.data)
-            setPersons(persons.concat(response.data))
+          .then(returnedPerson => {
+            setPersons(persons.concat(returnedPerson))
             setNewName('')
             setNewNum('')
           })
