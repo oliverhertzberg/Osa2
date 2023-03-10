@@ -1,6 +1,5 @@
-const Personslist = [
-    
-  ]
+import axios from "axios";
 
-
-  export default Personslist
+export default axios.create({
+    baseURL: 'http://localhost:3001'
+});

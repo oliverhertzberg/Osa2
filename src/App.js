@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
-import './index.css'
-import Personslist from './components/Persons'
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import './index.css';
 
 const App = () => {
-  const [persons, setPersons] = useState(Personslist)
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNum, setNewNum] = useState('')
   const [query, setQuery] = useState('')
@@ -28,7 +27,7 @@ useEffect(() => {
     console.log(e.target.value)
     setNewNum(e.target.value)
   }
-  
+  console.log("persons length:", persons.length)
   const addPerson = (e) => {
     e.preventDefault()
     const nameCheck = persons.map(person => person.name);
@@ -39,12 +38,21 @@ useEffect(() => {
     } else if (numCheck.includes(newNum)) {
       alert(`The number "${newNum}" is already in use, please type in another one.`)
     } else {
-      setPersons(persons.concat({
-        name: newName,
-        number: newNum,
-      }))
-      setNewName('')
-      setNewNum('')
+        axios
+          .post('http://localhost:3001/persons', {
+            name: newName,
+            number: newNum,
+            id: persons.length + 1
+          })
+          .then(response => {
+            console.log(response.data)
+            setPersons(persons.concat(response.data))
+            setNewName('')
+            setNewNum('')
+          })
+          .catch(error => {
+            console.log(error)
+          })
     }
   }
 
@@ -100,29 +108,3 @@ const Persons = (props) => {
 }
 
 export default App
-
-/* effektifunktio esimerkki:
-  useEffect(() => {
-  console.log('effect')
-
-  const eventHandler = response => {
-    console.log('promise fulfilled')
-    setNotes(response.data)
-  }
-
-  const promise = axios.get('http://localhost:3001/notes')
-  promise.then(eventHandler)
-}, []) 
-
-const hook = () => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
-  }
-  useEffect(hook, [])
-  console.log('render', persons.length, 'persons')
-  */
