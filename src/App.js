@@ -33,8 +33,21 @@ useEffect(() => {
     const nameCheck = persons.map(person => person.name);
     const numCheck = persons.map(person => person.number);
 
-    if (nameCheck.includes(newName)) {
-      alert(`The name "${newName}" is already in use, please type in another name.`)
+    if (nameCheck.map(name => name.toLowerCase()).includes(newName.toLowerCase())) {
+      if(window.confirm(`${newName} is already added to the phone book, would you like to replace the old number with the new one?`)){
+        const personToUpdate = persons.find(person => person.name.toLowerCase() === newName.toLowerCase())
+        const updatedPerson = {...personToUpdate, number: newNum}
+        personService
+        .update(personToUpdate.id, updatedPerson)
+        .then(returnedPerson => {
+          setPersons(persons.map(person => person.id !== personToUpdate.id ? person : returnedPerson))
+          setNewName('')
+          setNewNum('')
+        })
+        .catch(error => {
+          console.log(error);
+        })
+      }
     } else if (numCheck.includes(newNum)) {
       alert(`The number "${newNum}" is already in use, please type in another one.`)
     } else {
