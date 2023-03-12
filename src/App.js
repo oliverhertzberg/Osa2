@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import './index.css';
 import personService from './services/persons'
 
@@ -56,6 +55,19 @@ useEffect(() => {
     }
   }
 
+  const deletePerson = (id) => {
+    if (window.confirm(`Are you sure you want to delete ${persons.find(person => person.id === id).name}?`)) {
+      personService
+      .remove(id)
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== id))
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    }
+  }
+
   const filteredPersons = persons.filter(person => {
     return person.name.toLowerCase().includes(query.toLowerCase())
   })
@@ -71,7 +83,7 @@ useEffect(() => {
       handleNumChange={handleNumChange} newName={newName} newNum={newNum} />
 
       <h2>Numbers</h2>
-      <Persons filteredPersons={filteredPersons} />
+      <Persons filteredPersons={filteredPersons} deletePerson={deletePerson}/>
     </div>
   )
 }
@@ -102,7 +114,8 @@ const Persons = (props) => {
   return (
     <div>
       {props.filteredPersons.map(person => 
-        ( <div key={person.name}>{person.name} {person.number}</div>))}
+        ( <div key={person.name}>{person.name} {person.number} 
+        <button onClick={() =>props.deletePerson(person.id)}>delete</button></div>))}
     </div>
   )
 }
