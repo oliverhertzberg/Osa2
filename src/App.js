@@ -2,11 +2,19 @@ import { useState, useEffect } from 'react';
 import './index.css';
 import personService from './services/persons'
 
+import Persons from './components/contacts';
+import { ErrorNotification, SuccessNotification, EditNotification } from './components/notifications';
+import Filter from './components/contactfilter';
+import Form from './components/form';
+
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNum, setNewNum] = useState('')
   const [query, setQuery] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
+  const [editMessage, setEditMessage] = useState(null)
 
   
 useEffect(() => {
@@ -43,9 +51,22 @@ useEffect(() => {
           setPersons(persons.map(person => person.id !== personToUpdate.id ? person : returnedPerson))
           setNewName('')
           setNewNum('')
+          setEditMessage(
+            `Successfully edited contact ${returnedPerson.name}`
+          )
+          setTimeout(() => {
+            setEditMessage(null)
+        }, 5000)
         })
         .catch(error => {
           console.log(error);
+          setErrorMessage(
+            `${personToUpdate.name} was already removed from server`
+          )
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+          setPersons(persons.filter(p => p.id !== personToUpdate.id))
         })
       }
     } else if (numCheck.includes(newNum)) {
@@ -61,9 +82,16 @@ useEffect(() => {
             setPersons(persons.concat(returnedPerson))
             setNewName('')
             setNewNum('')
+            setSuccessMessage(
+              `Added ${returnedPerson.name}`
+            )
+            setTimeout(() => {
+              setSuccessMessage(null)
+            }, 5000)
           })
           .catch(error => {
             console.log(error)
+            
           })
     }
   }
@@ -74,6 +102,12 @@ useEffect(() => {
       .remove(id)
       .then(() => {
         setPersons(persons.filter(person => person.id !== id))
+        setErrorMessage(
+          `deleted ${persons.find(person => person.id === id).name}`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       })
       .catch(error => {
         console.log(error)
@@ -88,7 +122,10 @@ useEffect(() => {
   
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h2>Phone book</h2>
+      <ErrorNotification message={errorMessage} />
+      <SuccessNotification message={successMessage} />
+      <EditNotification message={editMessage} />
       <Filter query={query} setQuery={setQuery}/>
 
       <h2>add a new</h2>
@@ -101,36 +138,5 @@ useEffect(() => {
   )
 }
 
-const Filter = (props) => {
-    return(<div>
-      filter shown with <input type="search" value={props.query}  onChange={e => props.setQuery(e.target.value)} />
-    </div>)
-}
-
-const Form = (props) => {
-  return (
-    <form onSubmit={props.addPerson}>
-        <div>
-          name: <input value={props.newName} onChange={props.handleNameChange} />
-        </div>
-        <div>
-          number: <input value={props.newNum} onChange={props.handleNumChange} />
-        </div>
-        <div>
-          <button className='nappi' type='submit'>Add</button>
-        </div>
-      </form>
-  )
-}
-
-const Persons = (props) => {
-  return (
-    <div>
-      {props.filteredPersons.map(person => 
-        ( <div key={person.name}>{person.name} {person.number} 
-        <button onClick={() =>props.deletePerson(person.id)}>delete</button></div>))}
-    </div>
-  )
-}
 
 export default App
