@@ -21,7 +21,7 @@ const CountriesList = (props) => {
             </div>))
         ) : props.countries.length <= 10 ? 
             (props.countries.map((country) => (
-            <div key={country.cca3}>{country.name.common}</div>
+            <div key={country.cca3}>{country.name.common}<button onClick={()=> props.onShowButtonClick(country.name.common)}>show</button></div>
             )))
         :
             (<div>Too many matches, please specify further</div>)

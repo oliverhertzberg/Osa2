@@ -10,7 +10,6 @@ const client = axios.create({
 
 const App = () => {
   const [countries, setCountries] = useState([])
-  const [country, setCountry] = useState([])
   const [query, setQuery] = useState('')
 
   useEffect(() => {
@@ -35,6 +34,10 @@ const App = () => {
       setCountries([]);
     }
   }, [query])
+
+  const handleShowButtonClick = (country) => {
+    setQuery(country)
+  }
    
 
   return (
@@ -42,7 +45,7 @@ const App = () => {
       <form> Find countries: <input type="search" value={query} onChange={e => setQuery(e.target.value)} />
       </form>
       <pre>
-        <CountriesList countries={countries} />
+        <CountriesList onShowButtonClick={handleShowButtonClick} countries={countries} />
       </pre>
     </div>
   )
