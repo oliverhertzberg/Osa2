@@ -45,7 +45,7 @@ const App = () => {
       <form> Find countries: <input type="search" value={query} onChange={e => setQuery(e.target.value)} />
       </form>
       <pre>
-        <CountriesList onShowButtonClick={handleShowButtonClick} countries={countries} />
+        <CountriesList data={countries} onShowButtonClick={handleShowButtonClick} countries={countries} />
       </pre>
     </div>
   )
