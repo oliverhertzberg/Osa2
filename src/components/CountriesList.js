@@ -43,7 +43,7 @@ const CountriesList = (props) => {
             <img src={`https://flagcdn.com/w320/${country.cca2.toLowerCase()}.png`} alt={`flag of ${country.name.common}`}></img>
             {weather && (
                 <div>
-                    <p style={{fontWeight: 'bold'}} >Weather in Helsinki: </p>
+                    <p style={{fontWeight: 'bold'}} >Weather in {country.capital}: </p>
                     <p>Temperature: {Math.round(weather.main.temp - 273.15)} C</p>
                     <p>Humidity: {weather.main.humidity} %</p>
                     <p>Wind speed: {weather.wind.speed} m/s</p>
